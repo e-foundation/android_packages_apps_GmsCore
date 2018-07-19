@@ -1,0 +1,24 @@
+image: "registry.gitlab.eelo.io:5000/eelo/docker-android-apps-cicd:latest"
+
+stages:
+- build
+
+before_script:
+- export GRADLE_USER_HOME=$(pwd)/.gradle
+- chmod +x ./gradlew
+
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+  - .gradle/
+
+build:
+  stage: build
+  script:
+  - echo $ANDROID_SDK_HOME
+  - echo $JAVA_HOME
+  - git submodule update --recursive --init
+  - ./gradlew build
+  artifacts:
+    paths:
+    - play-services-core/build/outputs/apk/
