@@ -55,7 +55,7 @@ public class CheckinService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_ENABLE_CHECKIN, false)) {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_ENABLE_CHECKIN, true)) {
                 LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
                 if (info != null) {
                     Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
