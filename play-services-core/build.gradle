@@ -83,6 +83,10 @@ android {
     }
 
     lintOptions {
+        abortOnError false
+    }
+
+    lintOptions {
         disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity'
     }
 
