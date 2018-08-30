@@ -1,6 +1,6 @@
 [submodule "extern/UnifiedNlp"]
 	path = extern/UnifiedNlp
-	url = ssh://git@gitlab.eelo.io:2222/eelo/android_packages_apps_UnifiedNlp.git
+	url = ../android_packages_apps_UnifiedNlp.git
 [submodule "extern/GmsApi"]
 	path = extern/GmsApi
 	url = https://github.com/microg/android_external_GmsApi.git
