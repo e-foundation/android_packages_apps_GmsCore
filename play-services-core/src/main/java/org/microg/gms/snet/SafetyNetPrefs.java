@@ -21,7 +21,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String OFFICIAL_ATTEST_URL = "https://www.googleapis.com/androidcheck/v1/attestations/attest?alt=PROTO&key=AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA";
+    private static final String OFFICIAL_ATTEST_BASE_URL = "https://www.googleapis.com/androidcheck/v1/attestations/attest";
 
     public static final String PREF_SNET_DISABLED = "snet_disabled";
     public static final String PREF_SNET_OFFICIAL = "snet_official";
@@ -89,7 +89,7 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
     }
 
     public String getServiceUrl() {
-        if (official) return OFFICIAL_ATTEST_URL;
+        if (official) return OFFICIAL_ATTEST_BASE_URL;
         return customUrl;
     }
 }
