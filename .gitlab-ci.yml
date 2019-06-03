@@ -27,6 +27,7 @@ build:
   - echo sdk.dir $ANDROID_HOME > local.properties
   - export TERM=dumb
   - export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx2048m"
+  - echo mapbox.enabled true >> local.properties
   - ./gradlew build
   only:
     - tags
