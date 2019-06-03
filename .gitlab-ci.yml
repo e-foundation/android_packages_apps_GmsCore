@@ -24,6 +24,7 @@ build:
   stage: build
   script:
   - git submodule update --recursive --init
+  - echo sdk.dir $ANDROID_HOME > local.properties
   - ./gradlew build
   only:
     - tags
