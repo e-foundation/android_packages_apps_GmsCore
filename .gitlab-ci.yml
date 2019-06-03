@@ -25,6 +25,7 @@ build:
   script:
   - git submodule update --recursive --init
   - echo sdk.dir $ANDROID_HOME > local.properties
+  - echo mapbox.enabled true >> local.properties
   - ./gradlew build
   only:
     - tags
