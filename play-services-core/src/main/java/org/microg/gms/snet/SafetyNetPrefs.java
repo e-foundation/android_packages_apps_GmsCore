@@ -56,7 +56,7 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
     }
 
     public void update() {
-        disabled = defaultPreferences.getBoolean(PREF_SNET_DISABLED, false);
+        disabled = defaultPreferences.getBoolean(PREF_SNET_DISABLED, true);
         official = defaultPreferences.getBoolean(PREF_SNET_OFFICIAL, true);
         selfSigned = defaultPreferences.getBoolean(PREF_SNET_SELF_SIGNED, false);
         thirdParty = defaultPreferences.getBoolean(PREF_SNET_THIRD_PARTY, false);
@@ -86,6 +86,10 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
 
     public boolean isOfficial() {
         return official;
+    }
+
+    public boolean isThirdParty() {
+        return thirdParty;
     }
 
     public String getServiceUrl() {

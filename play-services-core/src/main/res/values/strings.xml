@@ -17,6 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
     <string name="gms_settings_name">microG Settings</string>
+    <string name="gms_settings_summary">Setup microG services Core.</string>
 
     <string name="just_a_sec">Just a sec…</string>
     <string name="google_account_label">Google</string>
@@ -127,11 +128,15 @@ This can take a couple of minutes."</string>
 
     <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
     <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
+    <string name="pref_auth_visible_title">Allow apps to find accounts</string>
+    <string name="pref_auth_visible_summary">When enabled, all applications on this device will be able to see email address of your Google Accounts without prior authorization.</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
 
     <string name="pref_more_settings">More</string>
 
+    <string name="pref_add_account_title">Account</string>
+    <string name="pref_add_account_summary">Add Google account</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
     <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.\nDeprecated, will be replaced in future release.</string>
@@ -165,11 +170,14 @@ This can take a couple of minutes."</string>
 
     <string name="pref_snet_status_official_title">Use official server</string>
     <string name="pref_snet_status_official_summary">Requires an unrooted system and microG DroidGuard Helper installed</string>
+    <string name="pref_snet_status_official_info">official server</string>
     <string name="pref_snet_status_third_party_title">Use third-party server</string>
     <string name="pref_snet_status_third_party_summary">Third-party servers might be able to reply to SafetyNet requests without DroidGuard signature</string>
+    <string name="pref_snet_status_third_party_info">third-party server</string>
     <string name="pref_snet_custom_url_title">Custom server URL</string>
     <string name="pref_snet_custom_url_summary">Full URL of the third-party server answering SafetyNet attestation requests</string>
     <string name="pref_snet_self_signed_title">Use self-signed certificate</string>
     <string name="pref_snet_self_signed_summary">Instead of requesting a server, sign SafetyNet responses locally using a self-signed certificate. Most apps will refuse to use self-signed responses.</string>
+    <string name="pref_snet_status_self_signed_info">self-signed certificate</string>
 
 </resources>

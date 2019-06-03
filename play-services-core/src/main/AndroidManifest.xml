@@ -90,14 +90,24 @@
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST" tools:ignore="ProtectedPermissions"/>
 
-    <uses-sdk tools:overrideLibrary="com.takisoft.fix.support.v7.preference,android.support.graphics.drawable.animated,android.arch.lifecycle,android.arch.lifecycle.livedata.core,android.arch.lifecycle.viewmodel,android.arch.core"/>
+    <uses-sdk tools:overrideLibrary="
+        com.takisoft.fix.support.v7.preference,
+        android.support.graphics.drawable.animated,
+        android.arch.lifecycle,
+        android.arch.lifecycle.livedata.core,
+        android.arch.lifecycle.viewmodel,
+        android.arch.core,
+        android.support.v7.mediarouter,
+        android.support.v7.palette" />
 
     <application
         android:allowBackup="false"
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_core_service_app"
-        android:label="@string/gms_app_name">
+        android:label="@string/gms_app_name"
+        android:name="android.support.multidex.MultiDexApplication">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature"/>
@@ -250,19 +260,13 @@
 
         <receiver android:name="org.microg.gms.gcm.UnregisterReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_DATA_CLEARED"/>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
-
-        <!-- Map -->
-        <provider
-            android:name="org.microg.gms.maps.data.SharedTileProvider"
-            android:authorities="org.microg.gms.map.tile"
-            android:enabled="true"
-            android:exported="true"/>
 
         <!-- DroidGuard -->
 
@@ -397,6 +401,14 @@
             </intent-filter>
         </activity>
 
+        <!-- Cast -->
+
+        <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
+            <intent-filter>
+                <action android:name="android.media.MediaRouteProviderService" />
+            </intent-filter>
+        </service>
+
         <!-- Chimera spoof -->
         <provider
             android:name="org.microg.gms.ChimeraSpoofProvider"
@@ -405,9 +417,11 @@
 
         <!-- microG custom UI -->
 
+        <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_microg_settings"
+            android:roundIcon="@mipmap/ic_microg_settings"
             android:label="@string/gms_settings_name"
             android:theme="@style/Theme.AppCompat.Settings.Dashboard">
             <intent-filter>
@@ -415,7 +429,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
+
+        <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
+        <activity-alias
+            android:name="org.microg.gms.ui.SettingsActivityLink"
+            android:targetActivity="org.microg.gms.ui.SettingsActivity"
+            android:icon="@drawable/microg_light_color_24"
+            android:label="@string/gms_settings_name"
+            android:theme="@style/Theme.AppCompat.Settings.Dashboard">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS"/>
+            </intent-filter>
+            <meta-data android:name="com.android.settings.category" android:value="com.android.settings.category.device"/>
+            <meta-data android:name="com.android.settings.icon" android:resource="@drawable/microg_light_color_24"/>
+            <meta-data android:name="com.android.settings.summary" android:resource="@string/gms_settings_summary"/>
+        </activity-alias>
 
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
@@ -595,6 +628,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.cast.CastDeviceControllerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE"/>
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.plus.service.START"/>
@@ -603,7 +642,6 @@
                 <action android:name="com.google.android.gms.appstate.service.START"/>
                 <action android:name="com.google.android.gms.ads.service.START"/>
                 <action android:name="com.google.android.gms.accounts.ACCOUNT_SERVICE"/>
-                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE"/>
                 <action android:name="com.google.android.gms.identity.service.BIND"/>
                 <action android:name="com.google.android.gms.wearable.BIND"/>
                 <action android:name="com.google.android.gms.auth.service.START"/>
