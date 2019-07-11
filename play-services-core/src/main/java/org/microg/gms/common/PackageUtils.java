@@ -60,10 +60,20 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.vr.cyclops", "188c5ca3863fa121216157a5baa80755ceda70ab");
         KNOWN_GOOGLE_PACKAGES.put("com.waze", "35b438fe1bc69d975dc8702dc16ab69ebf65f26f");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.wellbeing", "4ebdd02380f1fa0b6741491f0af35625dba76e9f");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.village.boond", "48e7985b8f901df335b5d5223579c81618431c7b");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.subscriptions.red", "de8304ace744ae4c4e05887a27a790815e610ff0");
     }
 
     public static boolean isGooglePackage(Context context, String packageName) {
         String signatureDigest = firstSignatureDigest(context, packageName);
+        return isGooglePackage(packageName, signatureDigest);
+    }
+
+    public static boolean isGooglePackage(String packageName, byte[] bytes) {
+        return isGooglePackage(packageName, sha1sum(bytes));
+    }
+
+    public static boolean isGooglePackage(String packageName, String signatureDigest) {
         if (signatureDigest == null) return false;
         if (Arrays.asList(GOOGLE_PRIMARY_KEYS).contains(signatureDigest)) return true;
         if (!KNOWN_GOOGLE_PACKAGES.containsKey(packageName)) return false;
@@ -162,13 +172,13 @@ public class PackageUtils {
                     packageName = packagesForUid[0];
                 } else if (Arrays.asList(packagesForUid).contains(suggestedPackageName)) {
                     packageName = suggestedPackageName;
-                } else if (suggestedPackageName == null) {
+                } else {
                     packageName = packagesForUid[0];
                 }
             }
         }
         if (packageName != null && suggestedPackageName != null && !packageName.equals(suggestedPackageName)) {
-            throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + packageName + "]");
+            throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + suggestedPackageName + "] (seems to be " + packageName + ")");
         }
         return packageName;
     }
