@@ -3,7 +3,7 @@
 -optimizations !code/allocation/variable
 
 # We're referencing stuff that is unknown to the system
--libraryjar ../unifiednlp-compat/build/classes/java/main
+#-libraryjar ../unifiednlp-compat/build/classes/java/main
 -dontwarn java.awt.**
 -dontwarn javax.annotation.**
 
@@ -31,6 +31,11 @@
 # Keep AutoSafeParcelables
 -keep public class * extends org.microg.safeparcel.AutoSafeParcelable {
     @org.microg.safeparcel.SafeParceled *;
+}
+
+# Keep form data
+-keepclassmembers class * {
+    @org.microg.gms.common.HttpFormClient$* *;
 }
 
 # Keep asInterface method cause it's accessed from SafeParcel
