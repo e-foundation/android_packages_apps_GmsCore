@@ -55,6 +55,7 @@ import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
+import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
 import java.io.IOException;
@@ -308,7 +309,12 @@ public class LoginActivity extends AssistantActivity {
 
                     @Override
                     public void onException(Exception exception) {
-                        Log.w(TAG, "onException: " + exception);
+                        Log.w(TAG, "onException", exception);
+                        runOnUiThread(() -> {
+                            showError(R.string.auth_general_error_desc);
+                            setNextButtonText(android.R.string.ok);
+                        });
+                        state = -2;
                     }
                 });
     }
@@ -339,7 +345,12 @@ public class LoginActivity extends AssistantActivity {
 
                     @Override
                     public void onException(Exception exception) {
-                        Log.w(TAG, "onException: " + exception);
+                        Log.w(TAG, "onException", exception);
+                        runOnUiThread(() -> {
+                            showError(R.string.auth_general_error_desc);
+                            setNextButtonText(android.R.string.ok);
+                        });
+                        state = -2;
                     }
                 });
     }
@@ -347,6 +358,7 @@ public class LoginActivity extends AssistantActivity {
     private boolean checkin(boolean force) {
         try {
             CheckinManager.checkin(LoginActivity.this, force);
+            McsService.scheduleReconnect(this);
             return true;
         } catch (IOException e) {
             Log.w(TAG, "Checkin failed", e);
