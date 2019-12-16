@@ -46,6 +46,8 @@ import javax.net.ssl.SSLContext;
 
 public class ProviderInstallerImpl {
     private static final String TAG = "GmsProviderInstaller";
+
+    //private static final List<String> DISABLED = Collections.singletonList("com.discord");
     private static final List<String> DISABLED = Collections.unmodifiableList(Arrays.asList("com.discord", "com.bankid.bus"));
 
     public static void insertProvider(Context context) {
