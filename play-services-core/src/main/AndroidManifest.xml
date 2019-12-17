@@ -441,7 +441,7 @@
         </activity>
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
-        <!-- <activity-alias
+        <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
