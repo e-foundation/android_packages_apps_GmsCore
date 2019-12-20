@@ -3,6 +3,9 @@ image: "registry.gitlab.e.foundation:5000/e/apps/docker-android-apps-cicd:latest
 stages:
 - build
 
+variables:
+  GIT_SUBMODULE_STRATEGY: normal
+
 before_script:
 - if [ -d "/srv/userscripts" ]; then cp -R userscripts/* /srv/userscripts ; fi
 - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
@@ -23,7 +26,6 @@ cache:
 build:
   stage: build
   script:
-  - git submodule update --recursive --init
   - echo sdk.dir $ANDROID_HOME > local.properties
   - echo mapbox.key $MAPBOX_KEY >> local.properties
   - echo mapbox.enabled true >> local.properties
