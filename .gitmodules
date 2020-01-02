@@ -1,20 +1,20 @@
 [submodule "extern/UnifiedNlp"]
 	path = extern/UnifiedNlp
 	url = https://gitlab.e.foundation/e/apps/android_packages_apps_UnifiedNlp
-	branch = master
+	branch = dev
 [submodule "extern/GmsApi"]
 	path = extern/GmsApi
 	url = https://gitlab.e.foundation/e/apps/GmsApi
-	branch = master
+	branch = dev
 [submodule "extern/Wearable"]
 	path = extern/Wearable
 	url = https://gitlab.e.foundation/e/apps/Wearable
-	branch = master
+	branch = dev
 [submodule "extern/GmsLib"]
 	path = extern/GmsLib
 	url = https://gitlab.e.foundation/e/apps/GmsLib
-	bramch = master
+	branch = dev
 [submodule "extern/RemoteDroidGuard"]
 	path = extern/RemoteDroidGuard
 	url = https://gitlab.e.foundation/e/apps/android_packages_apps_RemoteDroidGuard
-	branch = master
+	branch = dev
