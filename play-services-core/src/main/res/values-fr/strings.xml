@@ -90,10 +90,10 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="prefcat_location_service">Service de localisation</string>
     <string name="prefcat_operation_mode">Mode d’opération</string>
     <string name="prefcat_services">Services</string>
-    <string name="prefcat_test">Test</string>
+    <string name="prefcat_test">Tester</string>
     <string name="cond_gcm_bat_title">Optimisations de la batterie activées</string>
     <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services Core. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
-    <string name="cond_gcm_bat_action">Désactiver les optimisations de la batterie</string>
+    <string name="cond_gcm_bat_action">Ignorer les optimisations batterie</string>
     <string name="cond_perm_title">Autorisations manquantes</string>
     <string name="prefs_account">Préférences du compte</string>
     <string name="prefs_account_privacy">Informations personnelles &amp; vie privée</string>
@@ -111,7 +111,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Demander avant d’enregistrer une nouvelle application auprès de Google Cloud Messaging</string>
     <string name="pref_gcm_ping_interval">Intervalle de ping : <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">À propos de microG Services Core</string>
-    <string name="pref_about_summary">Informations de version et librairies utilisées</string>
+    <string name="pref_about_summary">Informations de version et bibliothèques utilisées</string>
     <string name="gcm_app_error_unregistering">Erreur lors du désenregistrement</string>
     <string name="gcm_app_not_installed_anymore">Cette application n’est plus installée</string>
     <string name="gcm_unregister_app">Désenregistrer</string>
@@ -143,7 +143,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_add_account_summary">Ajouter un compte Google</string>
     <string name="pref_add_account_title">Compte</string>
     <string name="pref_auth_visible_summary">Si activé, toutes les applications de cet appareil pourront lire l\'adresse mail de vos comptes Google, sans avoir à en demander l\'autorisation.</string>
-    <string name="pref_auth_visible_title">Autorise les applications à trouver les comptes</string>
+    <string name="pref_auth_visible_title">Autoriser les applications à trouver les comptes</string>
     <string name="auth_connecting">Votre appareil établit une connexion aux serveurs de Google pour vous y connecter.
 \n
 \nCeci peut prendre quelques secondes.</string>
