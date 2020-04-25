@@ -39,7 +39,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
             boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, false) || force) {
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, true) || force) {
                 if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()) &&
                         LastCheckinInfo.read(context).lastCheckin > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL) {
                     return;

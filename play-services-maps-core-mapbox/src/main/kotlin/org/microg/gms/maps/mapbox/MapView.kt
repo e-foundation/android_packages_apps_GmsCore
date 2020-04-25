@@ -46,6 +46,7 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
     override fun onResume() = map?.onResume() ?: Unit
     override fun onPause() = map?.onPause() ?: Unit
     override fun onDestroy() {
+        Log.d(TAG, "destroy")
         map?.onDestroy()
         map = null
     }

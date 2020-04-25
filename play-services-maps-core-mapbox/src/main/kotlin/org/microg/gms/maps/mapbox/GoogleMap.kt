@@ -210,6 +210,11 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun stopAnimation() = map?.cancelTransitions() ?: Unit
 
+    override fun setMapStyle(options: MapStyleOptions?): Boolean {
+        Log.d(TAG, "setMapStyle options: " + options?.getJson())
+        return true
+    }
+
     override fun setMinZoomPreference(minZoom: Float) {
         map?.setMinZoomPreference(minZoom.toDouble() - 1)
     }
@@ -436,7 +441,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     }
 
-    override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper) {
+    override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) {
         Log.d(TAG, "unimplemented Method: snapshot")
 
     }
@@ -678,23 +683,33 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun onResume() = mapView?.onResume() ?: Unit
     override fun onPause() = mapView?.onPause() ?: Unit
     override fun onDestroy() {
-        Log.d(TAG, "destroy");
+        Log.d(TAG, "destroy")
         circleManager?.onDestroy()
         circleManager = null
+
         lineManager?.onDestroy()
         lineManager = null
+
         fillManager?.onDestroy()
         fillManager = null
+
         symbolManager?.onDestroy()
         symbolManager = null
+
         pendingMarkers.clear()
         markers.clear()
+
         BitmapDescriptorFactoryImpl.unregisterMap(map)
+
         view.removeView(mapView)
+
         // TODO can crash?
         mapView?.onDestroy()
         mapView = null
-        map = null
+
+        // Don't make it null; this object is not deleted immediately, and it may want to access map.* stuff
+        //map = null
+
         created = false
         initialized = false
         loaded = false

@@ -59,6 +59,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -208,6 +209,12 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     public void onExitAmbient() throws RemoteException {
         Log.d(TAG, "unimplemented Method: onExitAmbient");
 
+    }
+
+    @Override
+    public boolean setMapStyle(MapStyleOptions options) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setMapStyle");
+        return true;
     }
 
     @Override

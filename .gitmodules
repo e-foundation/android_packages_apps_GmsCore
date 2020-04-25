@@ -1,15 +1,20 @@
 [submodule "extern/UnifiedNlp"]
 	path = extern/UnifiedNlp
-	url = https://github.com/microg/android_packages_apps_UnifiedNlp.git
+	url = https://gitlab.e.foundation/e/apps/android_packages_apps_UnifiedNlp
+	branch = dev
 [submodule "extern/GmsApi"]
 	path = extern/GmsApi
-	url = https://github.com/microg/android_external_GmsApi.git
+	url = https://gitlab.e.foundation/e/apps/GmsApi
+	branch = dev
 [submodule "extern/Wearable"]
 	path = extern/Wearable
-	url = https://github.com/microg/android_external_Wearable.git
+	url = https://gitlab.e.foundation/e/apps/Wearable
+	branch = dev
 [submodule "extern/GmsLib"]
 	path = extern/GmsLib
-	url = https://github.com/microg/android_external_GmsLib.git
+	url = https://gitlab.e.foundation/e/apps/GmsLib
+	branch = dev
 [submodule "extern/RemoteDroidGuard"]
 	path = extern/RemoteDroidGuard
-	url = https://github.com/microg/android_packages_apps_RemoteDroidGuard.git
+	url = https://gitlab.e.foundation/e/apps/android_packages_apps_RemoteDroidGuard
+	branch = dev

@@ -1,0 +1,37 @@
+image: "registry.gitlab.e.foundation:5000/e/apps/docker-android-apps-cicd:latest"
+
+stages:
+- build
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+before_script:
+- if [ -d "/srv/userscripts" ]; then cp -R userscripts/* /srv/userscripts ; fi
+- 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+- eval $(ssh-agent -s)
+- echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+- mkdir -p ~/.ssh
+- chmod 700 ~/.ssh
+- echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+- chmod 644 ~/.ssh/known_hosts
+- export GRADLE_USER_HOME=$(pwd)/.gradle
+- chmod +x ./gradlew
+
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+  - .gradle/
+
+build:
+  stage: build
+  script:
+  - echo sdk.dir $ANDROID_HOME > local.properties
+  - echo mapbox.key $MAPBOX_KEY >> local.properties
+  - echo mapbox.enabled true >> local.properties
+  - export TERM=dumb
+  - export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx4096m"
+  - ./gradlew assemble
+  artifacts:
+    paths:
+    - play-services-core/build/outputs/apk/

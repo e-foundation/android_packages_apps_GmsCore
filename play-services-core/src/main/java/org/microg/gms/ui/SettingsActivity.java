@@ -104,7 +104,7 @@ public class SettingsActivity extends AbstractDashboardActivity {
                     Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
             findPreference(PREF_UNIFIEDNLP).setSummary(getResources().getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount));
 
-            boolean checkinEnabled = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, false);
+            boolean checkinEnabled = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, true);
             findPreference(PREF_CHECKIN).setSummary(checkinEnabled ? R.string.service_status_enabled : R.string.service_status_disabled);
         }
     }

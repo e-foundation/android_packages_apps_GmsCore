@@ -442,7 +442,7 @@
         </activity>
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
-        <activity-alias
+        <!--<activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
@@ -461,7 +461,7 @@
             <meta-data
                 android:name="com.android.settings.summary"
                 android:resource="@string/gms_settings_summary"/>
-        </activity-alias>
+        </activity-alias> -->
 
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
@@ -652,6 +652,18 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.appinvite.AppInviteService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.appinvite.service.START"/>
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.firebase.dynamiclinks.DynamicLinksService">
+            <intent-filter>
+                <action android:name="com.google.firebase.dynamiclinks.service.START"/>
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.plus.service.START"/>
@@ -683,6 +695,8 @@
                 <action android:name="com.google.android.gms.phenotype.service.START"/>
                 <action android:name="com.google.android.gms.auth.api.credentials.service.START"/>
                 <action android:name="com.google.android.gms.gass.START"/>
+                <action android:name="com.google.android.gms.appinvite.service.START"/>
+                <action android:name="com.google.firebase.dynamiclinks.service.START"/>
             </intent-filter>
         </service>
     </application>
