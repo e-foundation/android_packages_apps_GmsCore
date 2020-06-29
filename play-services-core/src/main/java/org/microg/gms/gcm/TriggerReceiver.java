@@ -26,6 +26,8 @@ import android.util.Log;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
+import org.microg.gms.gcm.McsService;
+import org.microg.gms.checkin.CheckinService;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.N;
@@ -36,6 +38,7 @@ import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";
     public static final String FORCE_TRY_RECONNECT = "org.microg.gms.gcm.FORCE_TRY_RECONNECT";
+    public static final String TRY_RECONNECT = "org.microg.gms.gcm.TRY_RECONNECT";
     private static boolean registered = false;
 
     /**
@@ -67,6 +70,13 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
 
             if (LastCheckinInfo.read(context).androidId == 0) {
                 Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
+
+                startWakefulService(context, new Intent(ACTION_CONNECT, null, context, McsService.class)
+                    .putExtra(EXTRA_REASON, intent));
+
+                startWakefulService(context, new Intent(context, CheckinService.class)
+                    .putExtra(CheckinService.EXTRA_FORCE_CHECKIN, true));
+                
                 return;
             }
 
