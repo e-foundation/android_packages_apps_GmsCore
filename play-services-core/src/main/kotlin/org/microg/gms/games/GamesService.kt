@@ -22,7 +22,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.data.DataHolder
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -560,7 +559,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
                     serverAuthTokenManager.invalidateAuthToken()
                     serverAuthTokenManager.requestAuthWithBackgroundResolution(true)
                 }
-                if (serverAuthTokenResponse.auth != null) {
+                if (serverAuthTokenResponse?.auth != null) {
                     callbacks.onServerAuthCode(Status(CommonStatusCodes.SUCCESS), serverAuthTokenResponse.auth)
                 } else {
                     callbacks.onServerAuthCode(Status(CommonStatusCodes.SIGN_IN_REQUIRED), null)

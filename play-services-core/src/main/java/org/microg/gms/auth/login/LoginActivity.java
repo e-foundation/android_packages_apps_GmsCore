@@ -364,7 +364,7 @@ public class LoginActivity extends AssistantActivity {
         new AuthRequest().fromContext(this)
                 .appIsGms()
                 .callerIsGms()
-                .service(authManager.getService())
+                .service(authManager.service)
                 .email(account.name)
                 .token(AccountManager.get(this).getPassword(account))
                 .systemPartition(true)

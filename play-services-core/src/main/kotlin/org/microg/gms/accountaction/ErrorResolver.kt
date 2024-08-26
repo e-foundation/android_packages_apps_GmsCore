@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.runBlocking
+import org.microg.gms.auth.AuthResponse
 import org.microg.gms.common.Constants
 import org.microg.gms.cryptauth.isLockscreenConfigured
 import org.microg.gms.cryptauth.sendDeviceScreenlockState
@@ -108,14 +109,14 @@ fun Context.isMicrogAppGcmAllowed(): Boolean {
 
 }
 
-fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
+fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Account, retryFunction: () -> T): T? {
     when (this) {
         CryptAuthSyncKeys -> {
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
             runBlocking {
                 context.sendDeviceScreenlockState(account)
             }
-            return retryFunction.run()
+            return retryFunction()
         }
         is NoResolution -> {
             Log.w(TAG, "This account cannot be used with microG due to $reason")
@@ -135,14 +136,14 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
     }
 }
 
-fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
+fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Account, retryFunction: () -> T): T? {
     when (this) {
         CryptAuthSyncKeys -> {
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
             runBlocking {
                 context.sendDeviceScreenlockState(account)
             }
-            return retryFunction.run()
+            return retryFunction()
         }
         is NoResolution -> {
             Log.w(TAG, "This account cannot be used with microG due to $reason")
@@ -162,9 +163,4 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
             return null
         }
     }
-}
-
-interface RetryFunction<T> {
-    @Throws(IOException::class)
-    fun run(): T
 }
