@@ -27,13 +27,12 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
-import com.google.android.gms.R;
-
 import com.google.android.gms.common.internal.CertData;
+
+import org.microg.gms.accountaction.Either;
 import org.microg.gms.auth.*;
 import org.microg.gms.auth.login.LoginActivity;
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.utils.ExtendedPackageInfo;
 import org.microg.gms.utils.PackageManagerUtilsKt;
 
 import java.util.Arrays;
@@ -131,32 +130,36 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             authManager = new AuthManager(context, account.name, app, authTokenType);
         }
         try {
-            AuthResponse res = authManager.requestAuthWithBackgroundResolution(true);
-            if (res.auth != null) {
-                Log.d(TAG, "getAuthToken: " + res.auth);
-                Bundle result = new Bundle();
-                result.putString(KEY_ACCOUNT_TYPE, account.type);
-                result.putString(KEY_ACCOUNT_NAME, account.name);
-                result.putString(KEY_AUTHTOKEN, res.auth);
-                return result;
-            } else {
-                Bundle result = new Bundle();
-                Intent i = new Intent(context, AskPermissionActivity.class);
-                i.putExtras(options);
-                i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-                i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
-                i.putExtra(KEY_ACCOUNT_TYPE, account.type);
-                i.putExtra(KEY_ACCOUNT_NAME, account.name);
-                i.putExtra(KEY_AUTHTOKEN, authTokenType);
-                try {
-                    if (res.consentDataBase64 != null)
-                        i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
-                } catch (Exception e) {
-                    Log.w(TAG, "Can't decode consent data: ", e);
+            Either<Intent, AuthResponse> authResult = authManager.requestAuthWithErrorResolution(true);
+            Bundle result = new Bundle();
+            if (authResult instanceof Either.Right) {
+                AuthResponse res = ((Either.Right<AuthResponse>) authResult).getRight();
+                if (res.auth != null) {
+                    Log.d(TAG, "getAuthToken: " + res.auth);
+                    result.putString(KEY_ACCOUNT_TYPE, account.type);
+                    result.putString(KEY_ACCOUNT_NAME, account.name);
+                    result.putString(KEY_AUTHTOKEN, res.auth);
+                } else {
+                    Intent i = new Intent(context, AskPermissionActivity.class);
+                    i.putExtras(options);
+                    i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+                    i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
+                    i.putExtra(KEY_ACCOUNT_TYPE, account.type);
+                    i.putExtra(KEY_ACCOUNT_NAME, account.name);
+                    i.putExtra(KEY_AUTHTOKEN, authTokenType);
+                    try {
+                        if (res.consentDataBase64 != null)
+                            i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
+                    } catch (Exception e) {
+                        Log.w(TAG, "Can't decode consent data: ", e);
+                    }
+                    result.putParcelable(KEY_INTENT, i);
                 }
+            } else {
+                Intent i = ((Either.Left<Intent>) authResult).getLeft();
                 result.putParcelable(KEY_INTENT, i);
-                return result;
             }
+            return result;
         } catch (Exception e) {
             Log.w(TAG, e);
             return null;

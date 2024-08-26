@@ -2,17 +2,16 @@ package org.microg.gms.accountaction
 
 import android.accounts.Account
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.runBlocking
-import org.microg.gms.auth.AuthResponse
 import org.microg.gms.common.Constants
 import org.microg.gms.cryptauth.isLockscreenConfigured
 import org.microg.gms.cryptauth.sendDeviceScreenlockState
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.settings.SettingsContract
-import java.io.IOException
 
 
 /**
@@ -109,58 +108,42 @@ fun Context.isMicrogAppGcmAllowed(): Boolean {
 
 }
 
-fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Account, retryFunction: () -> T): T? {
+fun <T> Resolution.resolveToActionOrResult(context: Context, account: Account, retryFunction: () -> T): Either<Intent, T> {
     when (this) {
         CryptAuthSyncKeys -> {
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
             runBlocking {
                 context.sendDeviceScreenlockState(account)
             }
-            return retryFunction()
+            return Either.Right(retryFunction())
         }
         is NoResolution -> {
             Log.w(TAG, "This account cannot be used with microG due to $reason")
-            return null
+            return Either.Left(TODO())
         }
         is UserSatisfyRequirements -> {
             Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                context.sendAccountActionNotification(account, this)
-            }
-            return null
+            return Either.Left(AccountActionActivity.createIntent(context, account, this))
         }
         Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
-            return null
+            return Either.Left(TODO())
         }
     }
 }
 
 fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Account, retryFunction: () -> T): T? {
-    when (this) {
-        CryptAuthSyncKeys -> {
-            Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
-            runBlocking {
-                context.sendDeviceScreenlockState(account)
-            }
-            return retryFunction()
+    val actionOrResolution = resolveToActionOrResult(context, account, retryFunction)
+    return when (actionOrResolution) {
+        is Either.Left -> {
+            context.startActivity(actionOrResolution.left)
+            null
         }
-        is NoResolution -> {
-            Log.w(TAG, "This account cannot be used with microG due to $reason")
-            return null
-        }
-        is UserSatisfyRequirements -> {
-            Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                AccountActionActivity.createIntent(context, account, this).let {
-                    context.startActivity(it)
-                }
-            }
-            return null
-        }
-        Reauthenticate -> {
-            Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
-            return null
-        }
+        is Either.Right -> actionOrResolution.right
     }
+}
+
+sealed class Either<out L, out R> {
+    data class Left<out L>(val left: L) : Either<L, Nothing>()
+    data class Right<out R>(val right: R) : Either<Nothing, R>()
 }

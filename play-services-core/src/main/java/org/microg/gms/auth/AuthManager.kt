@@ -8,12 +8,14 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import org.microg.gms.accountaction.initiateFromBackgroundBlocking
+import org.microg.gms.accountaction.Either
+import org.microg.gms.accountaction.resolveToActionOrResult
 import org.microg.gms.accountaction.initiateFromForegroundBlocking
 import org.microg.gms.accountaction.resolveAuthErrorMessage
 import org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted
@@ -240,6 +242,27 @@ class AuthManager(
         }
 
     @Throws(IOException::class)
+    fun requestAuthWithErrorResolution(legacy: Boolean): Either<Intent, AuthResponse> {
+        return try {
+            Either.Right(requestAuth(legacy))
+        } catch (e: NotOkayException) {
+            if (e.message != null) {
+                val errorResolution = context.resolveAuthErrorMessage(
+                    e.message!!
+                )
+                return errorResolution?.resolveToActionOrResult(
+                    context,
+                    getAccount()
+                )  // infinite loop is prevented
+                { requestAuth(legacy) }
+                    ?: throw IOException(e)
+            } else {
+                throw IOException(e)
+            }
+        }
+    }
+
+    @Throws(IOException::class)
     fun requestAuthWithBackgroundResolution(legacy: Boolean): AuthResponse? {
         return try {
             requestAuth(legacy)
@@ -249,12 +272,12 @@ class AuthManager(
                     e.message!!
                 )
                 if (errorResolution != null) {
-                    errorResolution
-                        .initiateFromBackgroundBlocking(
+                    return errorResolution
+                        .resolveToActionOrResult(
                             context,
                             getAccount()
                         )  // infinite loop is prevented
-                        { requestAuth(legacy) }
+                        { requestAuth(legacy) }.let { if (it is Either.Right<AuthResponse>) it.right else null }
                 } else {
                     throw IOException(e)
                 }
@@ -274,7 +297,7 @@ class AuthManager(
                     e.message!!
                 )
                 if (errorResolution != null) {
-                    errorResolution
+                    return errorResolution
                         .initiateFromForegroundBlocking(
                             context,
                             getAccount()
